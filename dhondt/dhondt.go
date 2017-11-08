@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"errors"
 )
 
 type ElectionResults struct {
@@ -14,8 +15,21 @@ type ElectionResults struct {
 	Seats   uint
 }
 
-func (res *ElectionResults) LoadResults(fname string, delim string) (err error) {
+func (e *ElectionResults) Validate() (err error) {
+	if e.Parties <= 0 {
+		return errors.New("Parties should be a positive number")
+	}
 
+	//TODO: Validate that there are registered votes in the map
+
+	if e.Seats <= 0 {
+		return errors.New("Seats should be a positive number")
+	}
+
+	return
+}
+
+func (res *ElectionResults) LoadResults(fname string, delim string) (err error) {
 	res.Parties = 0
 	file, err := os.Open(fname)
 
